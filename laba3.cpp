@@ -1,11 +1,11 @@
 ﻿#include <iostream>
 #include <vector>
-#include <string>
 /*
 базовые операции 5+
-сохранение в строку по фикс обходу 1+ 
+сохранение в строку по фикс обходу (1+)? 
 по задаваему параметру 3+
-поиск на вхожд 3
+поиск на вхожд 3+
+извлечение поддерева 2+
 */
 using namespace std;
 
@@ -144,6 +144,16 @@ private:
             KLP_help(branch->right, vect);
         }
         return vect;
+    }
+
+    BST<T>* KLP_for_eject(node* cur, BST<T>* tree) {
+        node* tmp = cur;
+        if (tmp) {
+            tree->insert(cur->data);
+            KLP_for_eject(cur->left, tree);
+            KLP_for_eject(cur->right, tree);
+        }
+        return tree;
     }
 
     vector<T>* KPL_help(node* branch, vector<T>* vect) {
@@ -306,64 +316,192 @@ public:
         print_help(this->root);
         cout << endl;
     }
-    
+
+    BST<T>* eject(node* cur) {
+        BST<T>* new_tree = new BST<T>;
+        return KLP_for_eject(cur, new_tree);
+    }
+    T what_in_node(node* cur) {
+        return cur->data;
+    }
 };
 
+void interface() {
+    int check;
+    cout << "to create integer empty binary search tree press 1" << endl;
+    cout << "to exit press 0" << endl;
+    cin >> check;
+    BST<int>* cur = new BST<int>;
+    BST<int>* second_tree = new BST<int>;
+    while (check) {
+        cout << "press 1 to insert element" << endl;
+        cout << "press 2 to search element" << endl;
+        cout << "press 3 to delete element" << endl;
+        cout << "press 4 to check maximum" << endl;
+        cout << "press 5 to check minimum" << endl;
+        cout << "press 6 to make vector from tree" << endl;
+        cout << "press 7 to make subtree" << endl;
+        cout << "press 8 to find subtree" << endl;
+        cout << "press 9 to check empty or not" << endl;
+        cout << "press 10 to check how many elements in tree" << endl;
+        cout << "press 11 to check all elements in tree" << endl;
+        cout << "press 0 to exit" << endl;
+        cin >> check;
+        if (check == 1) {
+            int rabotaem;
+            cout << "enter element" << endl;
+            cin >> rabotaem;
+            cur->insert(rabotaem);
+            cout << rabotaem << " inserted! " << endl;
+            while (check) {
+                cout << "press 1 if you want insert one more element" << endl;
+                cout << "press 0 to stop" << endl;
+                cin >> check;
+                if (check == 1) {
+                    cin >> rabotaem;
+                    cur->insert(rabotaem);
+                }
+            }
+            check = 1;
+        }
+        else if (check == 2) {
+            int rabotaem;
+            cout << "enter element" << endl;
+            cin >> rabotaem;
+            if (cur->search(rabotaem)) {
+                cout << rabotaem << " found, what to do?" << endl;
+                cout << "press 1 to delete element" << endl;
+                cout << "press 2 to make subtree with this root" << endl;
+                cout << "press 3 to don`t touch it" << endl;
+                cin >> check;
+                if (check == 1)
+                    cur->delete_node(rabotaem);
+                else if (check == 2)
+                    check = 8;
+                else if (check == 3)
+                    check = 2;
+            }
+        }
+        else if (check == 3) {
+            int rabotaem;
+            cout << "enter element" << endl;
+            cin >> rabotaem;
+            cur->delete_node(rabotaem);
+            cout << rabotaem << " deleted" << endl;
+        }
+        else if (check == 4) { 
+            cout << "maximum is " << cur->what_in_node(cur->tree_max()) << endl;
+        }
+        else if (check == 5) {
+            cout << "minimum is " << cur->what_in_node(cur->tree_min()) << endl;
+        }
+        else if (check == 6) {
+            cout << "you have 6 variants to make it:" << endl;
+            cout << "press 1 to ROOT-LEFT-RIGHT" << endl;
+            cout << "press 2 to ROOT-RIGHT-LEFT" << endl;
+            cout << "press 3 to LEFT-ROOT-RIGHT" << endl;
+            cout << "press 4 to LEFT-RIGHT-ROOT" << endl;
+            cout << "press 5 to RIGHT-LEFT-ROOT" << endl;
+            cout << "press 6 to RIGHT-ROOT-LEFT" << endl;
+            cin >> check;
+            if (check == 1) {
+                cout << "in vector: ";
+                for (int i = 0; i < cur->check_count(); i++) {
+                    cout << (*cur->KLP())[i] << " ";
+                }
+                cout << endl;
+            }
+            if (check == 2) {
+                cout << "in vector: ";
+                for (int i = 0; i < cur->check_count(); i++) {
+                    cout << (*cur->KPL())[i] << " ";
+                }
+                cout << endl;
+            }
+            if (check == 3) {
+                cout << "in vector: ";
+                for (int i = 0; i < cur->check_count(); i++) {
+                    cout << (*cur->LKP())[i] << " ";
+                }
+                cout << endl;
+            }
+            if (check == 4) {
+                cout << "in vector: ";
+                for (int i = 0; i < cur->check_count(); i++) {
+                    cout << (*cur->LPK())[i] << " ";
+                }
+                cout << endl;
+            }
+            if (check == 5) {
+                cout << "in vector: ";
+                for (int i = 0; i < cur->check_count(); i++) {
+                    cout << (*cur->PLK())[i] << " ";
+                }
+                cout << endl;
+            }
+            if (check == 6) {
+                cout << "in vector: ";
+                for (int i = 0; i < cur->check_count(); i++) {
+                    cout << (*cur->PKL())[i] << " ";
+                }
+                cout << endl;
+            }
+        }
+        else if (check == 7) {
+            cout << "how many elements you want to insert?" << endl;
+            cin >> check;
+            for (int i = 0; i < check; i++) {
+                int rabotaem;
+                cout << "1: " << endl;
+                cin >> rabotaem;
+                second_tree->insert(rabotaem);
+            }
+            cout << "this tree saved like second tree" << endl;
+            check = 7;
+        }
+        else if (check == 8) {
+            cout << "press 1 to create new subtree" << endl;
+            cout << "press 2 to use second tree" << endl;
+            cin >> check;
+            if (check == 1) {
+                BST<int>* tmp_tree = new BST<int>;
+                cout << "how many elements you want insert to tree?" << endl;
+                cin >> check;
+                for (int i = 0; i < check; i++) {
+                    int rabotaem;
+                    cin >> rabotaem;
+                    tmp_tree->insert(rabotaem);
+                }
+                if (cur->find_subtree(tmp_tree))
+                    cout << "subtree found!" << endl;
+                else
+                    cout << "subtree not found" << endl;
+            }
+            else if (check == 2) {
+                if (cur->find_subtree(second_tree))
+                    cout << "subtree found!" << endl;
+                else
+                    cout << "subtree not found" << endl;
+            }
+            check = 8;
+        }
+        else if (check == 9) {
+            if (cur->is_empty())
+                cout << "tree is empty" << endl;
+            else
+                cout << "tree isn`t empty" << endl;
+        }
+        else if (check == 10) {
+            cout << cur->check_count() << " elements in tree" << endl;
+        }
+        else if (check == 11) {
+            cur->print();
+        }
+    }
+}
+
 int main() {
-    BST<int> a;
-    cout << a.is_empty() << endl;
-    a.insert(228);
-    cout << a.is_empty() << endl;
-    a.insert(13);
-    cout << a.is_empty() << endl;
-    a.insert(132);
-    a.insert(600);
-    a.insert(22);
-    a.insert(411);
-    a.insert(12);
-    a.insert(421);
-    a.insert(32);
-    a.insert(87);
-    a.insert(76);
-    a.insert(27);
-    a.insert(25);
-    a.insert(8);
-    a.print();
-    cout << a.search(8)->data << endl;
-    cout << a.tree_max()->data << "  " << a.tree_min()->data << endl;
-    cout << "in root:  " << a.what_in_root() << endl;
-    a.print();
-    cout << a.check_count() << endl;
-    cout << "KLP: ";
-    for (int i = 0; i < a.check_count(); i++) {
-        cout << (*a.KLP())[i] << " ";
-    }
-    cout << endl << "KPL: ";
-    for (int i = 0; i < a.check_count(); i++) {
-        cout << (*a.KPL())[i] << " ";
-    }
-    cout << endl << "LKP: ";
-    for (int i = 0; i < a.check_count(); i++) {
-        cout << (*a.LKP())[i] << " ";
-    }
-    cout << endl << "LPK: ";
-    for (int i = 0; i < a.check_count(); i++) {
-        cout << (*a.LPK())[i] << " ";
-    }
-    cout << endl << "PLK: ";
-    for (int i = 0; i < a.check_count(); i++) {
-        cout << (*a.PLK())[i] << " ";
-    }
-    cout << endl << "PKL: ";
-    for (int i = 0; i < a.check_count(); i++) {
-        cout << (*a.PKL())[i] << " ";
-    }
-    BST<int>* b = new BST<int>;
-    cout << endl << b->is_empty() << endl;
-    b->insert(32);
-    b->insert(27);
-    b->insert(87);
-    cout << a.find_subtree(b);
+    interface();
 
     return 0;
 }
