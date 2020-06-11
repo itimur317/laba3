@@ -1,14 +1,15 @@
 ﻿#include <iostream>
 #include <vector>
+#include <cassert>
 /*
-базовые операции 5+
-сохранение в строку по фикс обходу (1+)? 
-по задаваему параметру 3+
-поиск на вхожд 3+
-извлечение поддерева 2+
+базовые операции 5+ tested
+сохранение в строку по фикс обходу (1+)? tested
+по задаваему параметру 3+ tested
+поиск на вхожд 3+ tested
+извлечение поддерева 2+ tested
+== 13(14)
 */
 using namespace std;
-
 
 template <class T>
 class BST {
@@ -283,6 +284,12 @@ public:
         }
     }
 
+    void clear_tree() {
+        destroy_tree(this->root);
+        this->root = nullptr;
+        this->count = 0;
+    }
+
     node* search(T item) {
         return search_help(item, this->root);
     }
@@ -450,9 +457,12 @@ void interface() {
         else if (check == 7) {
             cout << "how many elements you want to insert?" << endl;
             cin >> check;
+            if (!second_tree->is_empty()) {
+                second_tree->clear_tree();
+            }
             for (int i = 0; i < check; i++) {
                 int rabotaem;
-                cout << "1: " << endl;
+                cout << i<< ": " << endl;
                 cin >> rabotaem;
                 second_tree->insert(rabotaem);
             }
@@ -478,7 +488,9 @@ void interface() {
                     cout << "subtree not found" << endl;
             }
             else if (check == 2) {
-                if (cur->find_subtree(second_tree))
+                if (second_tree->is_empty())
+                    cout << "second tree is empty" << endl;
+                else if (cur->find_subtree(second_tree))
                     cout << "subtree found!" << endl;
                 else
                     cout << "subtree not found" << endl;
@@ -500,8 +512,353 @@ void interface() {
     }
 }
 
-int main() {
-    interface();
+void test_is_empty_1() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    assert(!a->is_empty());
+}
 
+void test_is_empty_2() {
+    BST<int>* a = new BST<int>;
+    assert(a->is_empty());
+}
+
+void test_check_count() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(22);
+    assert(a->check_count() == 2);
+}
+
+void test_insert_1() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    assert(a->what_in_root() == 13);
+}
+
+void test_insert_2() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(22);
+    assert(a->what_in_node(a->tree_max()) == 22);
+}
+
+void test_delete_1() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->delete_node(13);
+    assert(a->is_empty() == 1);
+}
+
+void test_max() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    assert(a->what_in_node(a->tree_max()) == 25);
+}
+
+void test_min() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    assert(a->what_in_node(a->tree_min()) == 5);
+}
+
+void test_delete_2() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(22);
+    a->insert(7);
+    a->delete_node(7);
+    assert(a->check_count() == 2);
+    assert(a->what_in_node(a->tree_min()) == 13);
+}
+
+void test_search_1() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    assert(a->what_in_node(a->search(13)) == 13);
+    assert(a->what_in_root() == 13);
+}
+
+void test_search_2() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(22);
+    a->insert(7);
+    assert(a->what_in_node(a->search(22)) == 22);
+}
+
+void test_KLP() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    vector <int> exp = { 13 , 7 , 5 , 10 , 22 , 17 , 25 };
+    for (unsigned int i = 0; i < a->check_count(); i++) {
+        assert((*a->KLP())[i] == exp[i]);
+    }
+}
+
+void test_KPL() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    vector <int> exp = { 13 , 22 , 25 , 17 , 7 , 10 , 5 };
+    for (int i = 0; i < a->check_count(); i++) {
+        assert((*a->KPL())[i] == exp[i]);
+    }
+}
+
+void test_LKP() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    vector <int> exp = { 5 , 7 , 10 , 13 , 17 , 22 , 25 };
+    for (unsigned int i = 0; i < a->check_count(); i++) {
+        assert((*a->LKP())[i] == exp[i]);
+    }
+}
+
+void test_LPK() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    vector <int> exp = { 5 , 10 , 7 , 17 , 25 , 22 , 13 };
+    for (int i = 0; i < a->check_count(); i++) {
+        assert((*a->LPK())[i] == exp[i]);
+    }
+}
+
+void test_PLK() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    vector <int> exp = { 25 , 17 , 22 , 10 , 5 , 7 , 13 };
+    for (int i = 0; i < a->check_count(); i++) {
+        assert((*a->PLK())[i] == exp[i]);
+    }
+}
+
+void test_PKL() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    vector <int> exp = { 25 , 22 , 17 , 13 , 10 , 7 , 5 };
+    for (int i = 0; i < a->check_count(); i++) {
+        assert((*a->PKL())[i] == exp[i]);
+    }
+}
+
+void test_vhozhdenie_1() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    BST<int>* b = new BST<int>;
+    assert(b->is_empty());
+    assert(a->find_subtree(b));
+}
+
+void test_vhozhdenie_2() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    BST<int>* b = new BST<int>;
+    b->insert(13);
+    b->insert(7);
+    b->insert(22);
+    assert(a->find_subtree(b));
+}
+void test_vhozhdenie_3() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    BST<int>* b = new BST<int>;
+    b->insert(13);
+    b->insert(22);
+    b->insert(17);
+    b->insert(25);
+    assert(a->find_subtree(b));
+}
+
+void test_vhozhdenie_4() {
+    BST<int>* a = new BST<int>;
+
+    BST<int>* b = new BST<int>;
+    b->insert(13);
+    b->insert(22);
+    b->insert(17);
+    b->insert(25);
+    assert(!a->find_subtree(b));
+}
+
+void test_vhozhdenie_5() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    BST<int>* b = new BST<int>;
+    b->insert(13);
+    b->insert(22);
+    b->insert(17);
+    b->insert(25);
+    b->insert(7);
+    b->insert(5);
+    b->insert(13);
+    assert(a->find_subtree(b));
+}
+
+void test_izvlechenie_1() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    BST<int>* b = new BST<int>;
+    b = a->eject(a->search(22));
+    assert(a->check_count() == 7); // проверили, что с а всё ок
+    assert(b->check_count() == 3);
+    assert(b->what_in_root() == 22);
+    assert((*b->KLP())[0] == 22);
+    assert((*b->KLP())[1] == 17);
+    assert((*b->KLP())[2] == 25);
+}
+
+void test_izvlechenie_2() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    BST<int>* b = new BST<int>;
+    b = a->eject(a->search(17));
+    assert(a->check_count() == 7);
+    assert(b->check_count() == 1);
+    assert(b->what_in_root() == 17);
+}
+
+void test_izvlechenie_3() {
+    BST<int>* a = new BST<int>;
+    a->insert(13);
+    a->insert(7);
+    a->insert(22);
+    a->insert(5);
+    a->insert(10);
+    a->insert(17);
+    a->insert(25);
+    BST<int>* b = new BST<int>;
+    b = a->eject(a->search(13));
+    assert(a->check_count() == 7);
+    assert(b->check_count() == 7);
+    for (int i = 0; i < 7; i++) {
+        assert( (*a->KLP())[i] == (*b->KLP())[i]);
+    }
+    for (int i = 0; i < 7; i++) {
+        assert((*a->LKP())[i] == (*b->LKP())[i]);
+    }
+    for (int i = 0; i < 7; i++) {
+        assert((*a->PKL())[i] == (*b->PKL())[i]); // проверю 3 варианта
+    }
+}
+
+void TestALL() {
+    test_check_count();
+    test_delete_1();
+    test_delete_2();
+    test_min();
+    test_max();
+    test_insert_1();
+    test_insert_2();
+    test_is_empty_1();
+    test_is_empty_2();
+    test_izvlechenie_1();
+    test_izvlechenie_2();
+    test_izvlechenie_3();
+    test_vhozhdenie_1();
+    test_vhozhdenie_2();
+    test_vhozhdenie_3();
+    test_vhozhdenie_4();
+    test_vhozhdenie_5();
+    test_KLP();
+    test_KPL();
+    test_PKL();
+    test_PLK();
+    test_LKP();
+    test_LPK();
+    test_search_1();
+    test_search_2();
+}
+
+
+
+
+
+int main() {
+    TestALL();
+    interface();
     return 0;
 }
