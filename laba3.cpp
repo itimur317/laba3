@@ -273,7 +273,9 @@ public:
     }
 
     void insert(T item) {
-        this->count++;
+        if (!search(item)) {
+            this->count++;
+        }
         if (this->root != nullptr)
             insert_help(this->root, item);
         else {
@@ -295,7 +297,9 @@ public:
     }
 
     void delete_node(T item) {
-        this->count--;
+        if (search(item)) {
+            this->count--;
+        }
         this->root = delete_help(item, this->root);
     }
 
@@ -627,7 +631,7 @@ void test_KPL() {
     a->insert(10);
     a->insert(17);
     a->insert(25);
-    vector <int> exp = { 13 , 22 , 25 , 17 , 7 , 10 , 5 };
+    vector <int> exp = { 13 , 22 , 25 , 17 , 7 , 10 , 5 }; 
     for (int i = 0; i < a->check_count(); i++) {
         assert((*a->KPL())[i] == exp[i]);
     }
