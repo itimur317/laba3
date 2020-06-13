@@ -315,7 +315,7 @@ public:
         node* cur1 = search(little_tree->what_in_root());
         if (!cur1)
             return 0;
-        if (find_subtree_help(cur1, little_tree->root)){
+        if (find_subtree_help(this->root, little_tree->root)){
             return 1;
         }
         return 0;
