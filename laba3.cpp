@@ -609,7 +609,7 @@ void test_KLP() {
     a->insert(17);
     a->insert(25);
     vector <int> exp = { 13 , 7 , 5 , 10 , 22 , 17 , 25 };
-    for (unsigned int i = 0; i < a->check_count(); i++) {
+    for (int i = 0; i < a->check_count(); i++) {
         assert((*a->KLP())[i] == exp[i]);
     }
 }
@@ -639,7 +639,7 @@ void test_LKP() {
     a->insert(17);
     a->insert(25);
     vector <int> exp = { 5 , 7 , 10 , 13 , 17 , 22 , 25 };
-    for (unsigned int i = 0; i < a->check_count(); i++) {
+    for (int i = 0; i < a->check_count(); i++) {
         assert((*a->LKP())[i] == exp[i]);
     }
 }
