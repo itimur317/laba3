@@ -42,7 +42,7 @@ private:
                 cur->left->right = nullptr;
             }
         }
-        else if (item > cur->data) {
+        else if (item >= cur->data) {
             if (cur->right != nullptr) {
                 insert_help(cur->right, item);
             }
@@ -273,9 +273,7 @@ public:
     }
 
     void insert(T item) {
-        if (!search(item)) {
-            this->count++;
-        }
+        this->count++;
         if (this->root != nullptr)
             insert_help(this->root, item);
         else {
@@ -770,7 +768,7 @@ void test_vhozhdenie_5() {
     b->insert(25);
     b->insert(7);
     b->insert(5);
-    b->insert(13);
+    b->insert(10);
     assert(a->find_subtree(b));
 }
 
@@ -868,5 +866,6 @@ void TestALL() {
 int main() {
     TestALL();
     interface();
+
     return 0;
 }
