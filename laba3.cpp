@@ -393,8 +393,12 @@ void interface() {
             int rabotaem;
             cout << "enter element" << endl;
             cin >> rabotaem;
-            cur->delete_node(rabotaem);
-            cout << rabotaem << " deleted" << endl;
+            if (cur->search(rabotaem)) {
+                cur->delete_node(rabotaem);
+                cout << rabotaem << " deleted" << endl;
+            }
+            else
+                cout << "not found!" << endl;
         }
         else if (check == 4) { 
             cout << "maximum is " << cur->what_in_node(cur->tree_max()) << endl;
