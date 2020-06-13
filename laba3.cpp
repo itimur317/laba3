@@ -312,10 +312,10 @@ public:
         if (little_tree->is_empty()) {
             return 1;
         }
-        node* cur1 = search(little_tree->what_in_root());
+        node* cur1 = little_tree->search(little_tree->what_in_root());
         if (!cur1)
             return 0;
-        if (find_subtree_help(this->root, little_tree->root)){
+        if (find_subtree_help(this->root, cur1)){
             return 1;
         }
         return 0;
